@@ -1,0 +1,66 @@
+l=-1;
+N=100;
+r=1;
+h=(r-l)/N
+x=l:h:r;
+%difur: a(x)y''+b(x)y'+c(x)y=F(x)
+a=ones(size(x));
+b=zeros(size(x));
+c=zeros(size(x));
+F=2*ones(size(x));
+%gran usl: 
+%alp__l*y+bet__l*y'=gam__l
+%alp__l*y+bet__l*y'=gam__l
+alp__l=0;
+bet__l=1;
+gam__l=1;
+alp__r=0;
+bet__r=1;
+gam__r=1;
+
+A=a./h./h+b./h./2
+B=a./h./h-b./h./2
+C=2*a./h./h-c
+F
+alp_l=   alp__l/(alp__l-bet__l*h)
+bet_l=-h*gam__l/(alp__l-bet__l*h)
+alp_r=   alp__r/(alp__r+bet__r*h)
+bet_r= h*gam__r/(alp__r+bet__r*h)
+
+fout=fopen('progonka/input.txt','w');
+fprintf(fout,'%d %f %f %f %f\n',length(x)-1,alp_l,bet_l,alp_r,bet_r);
+for q=A
+    fprintf(fout,'%f ',q);
+end;
+  fprintf(fout,'\n');
+for q=B
+    fprintf(fout,'%f ',q);
+end;
+  fprintf(fout,'\n');
+for q=C
+    fprintf(fout,'%f ',q);
+end;
+  fprintf(fout,'\n');
+for q=F
+    fprintf(fout,'%f ',x);
+end;
+  fprintf(fout,'\n');
+fclose(fout);
+
+err=system('progonka\Debug\progonka.exe progonka\');
+if(err)
+    error('error in call progonka');
+end;
+
+fin=fopen('progonka/output.txt');
+y=[];
+for i=x
+    tmp=fscanf(fin,'%f');
+    y=[y tmp];
+end;
+plot(x,y);
+
+
+
+
+
